@@ -28,6 +28,7 @@ void gestionEvenement(EvenementGfx evenement)
 {
     static int difficulte = 1;
     static structTab t;
+    static structCaseDevoile caseDevoile;
 
     switch (evenement)
     {
@@ -35,14 +36,17 @@ void gestionEvenement(EvenementGfx evenement)
         t = creeTab(difficulte);
         remplirTabMines(&t);
         remplirTabChiffres(&t);
-        afficheTab(t);
+        demandeTemporisation(20);
         break;
 
     case Temporisation:
+        rafraichisFenetre();
         break;
 
     case Affichage:
         afficheGrille(difficulte, &t);
+        devoileCase(getCol(abscisseSouris()), getRow(ordonneeSouris()), &caseDevoile);
+        dessineCaseDevoile(&caseDevoile);
         break;
 
     case Clavier:

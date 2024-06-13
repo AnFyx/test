@@ -6,6 +6,7 @@
 #include "gfxlib/BmpLib.h" // Cet include permet de manipuler des fichiers BMP
 #include "gfxlib/ESLib.h"  // Pour utiliser valeurAleatoire()
 #include "tableau.h"
+#include "grille.h"
 
 void afficheGrille(int difficulte, structTab *t)
 {
@@ -111,7 +112,59 @@ int getValTab(structTab t, int x, int y)
     }
     else
     {
-        printf("%d\n", t.tableau[y - 1][x - 1]);
+        // printf("%d\n", t.tableau[y - 1][x - 1]);
         return t.tableau[y - 1][x - 1];
+    }
+}
+
+void ajouteCaseDevoile(structCaseDevoile *caseDevoile, int x1, int y1, int x2, int y2)
+{
+    caseDevoile->tableau[caseDevoile->indice][0] = x1;
+    caseDevoile->tableau[caseDevoile->indice][1] = y1;
+    caseDevoile->tableau[caseDevoile->indice][2] = x2;
+    caseDevoile->tableau[caseDevoile->indice][3] = y2;
+    caseDevoile->indice += 1;
+}
+
+void devoileCase(int col, int row, structCaseDevoile *caseDevoile)
+{
+    if (etatBoutonSouris() == GaucheAppuye)
+    {
+        couleurCourante(0, 0, 0);
+        rectangle((col - 1) * 30 + 50, (row - 1) * 30 + 50, (col - 1) * 30 + 80, (row - 1) * 30 + 80);
+        ajouteCaseDevoile(caseDevoile, (col - 1) * 30 + 50, (row - 1) * 30 + 50, (col - 1) * 30 + 80, (row - 1) * 30 + 80);
+    }
+}
+
+void dessineCaseDevoile(structCaseDevoile *caseDevoile)
+{
+    for (int i = 0; i < sizeof(caseDevoile->tableau); i++)
+    {
+        if (caseDevoile->tableau[i][3] != 0) //[3] est Y2, qui ne pourra jamais etre nul
+        {
+            rectangle(caseDevoile->tableau[i][0], caseDevoile->tableau[i][1], caseDevoile->tableau[i][2], caseDevoile->tableau[i][3]);
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+
+void afficheCaseDevoile(structCaseDevoile *caseDevoile)
+{
+    for (int i = 0; i < sizeof(caseDevoile->tableau); i++)
+    {
+        if (caseDevoile->tableau[i][3] != 0) //[3] est Y2, qui ne pourra jamais etre nul
+        {
+            printf("X1 : %d\n", caseDevoile->tableau[i][0]);
+            printf("Y1 : %d\n", caseDevoile->tableau[i][1]);
+            printf("X2 : %d\n", caseDevoile->tableau[i][2]);
+            printf("Y1 : %d\n", caseDevoile->tableau[i][3]);
+        }
+        else
+        {
+            break;
+        }
     }
 }
